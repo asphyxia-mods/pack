@@ -4,7 +4,8 @@
   1. installs the pack's client side into WORK/instance
   2. starts a vanilla dedicated server (offline mode, flat world)
   3. launches the Fabric client via portablemc, joining that server
-  4. passes if the player joins and the client survives --soak seconds in-game
+  4. passes if the player joins, stays connected for --soak seconds, and is
+     still in the server's player list (`list`) at the end
 
 With --backend opengl|vulkan the client is forced onto that graphics backend
 and the test fails if the game falls back to the other one.
@@ -24,6 +25,7 @@ import os
 import re
 import shutil
 import signal
+import socket
 import subprocess
 import sys
 import time
@@ -56,7 +58,12 @@ def server_jar(mc: str, dest: Path) -> Path:
     return jar
 
 
-def wait_for(log: Path, pattern: str, proc: subprocess.Popen, timeout: float, also: list[subprocess.Popen] = ()) -> bool:
+# The game's main thread can die while the JVM stays up; don't wait out the timeout.
+FATAL = re.compile(r'Uncaught exception in thread "(main|Render thread)"|Preparing crash report')
+
+
+def wait_for(log: Path, pattern: str, proc: subprocess.Popen, timeout: float,
+             also: list[subprocess.Popen] = (), game_log: Path | None = None) -> bool:
     expr = re.compile(pattern)
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
@@ -65,8 +72,16 @@ def wait_for(log: Path, pattern: str, proc: subprocess.Popen, timeout: float, al
         for p in (proc, *also):
             if p.poll() is not None:
                 return False
+        if game_log and game_log.exists() and (m := FATAL.search(game_log.read_text(errors="replace"))):
+            raise Fail(f"client hit a fatal error before joining ({m.group(0)})")
         time.sleep(1)
     return False
+
+
+def read_from(log: Path, offset: int) -> str:
+    with open(log, "rb") as f:
+        f.seek(offset)
+        return f.read().decode(errors="replace")
 
 
 def stop(proc: subprocess.Popen, grace: float = 20) -> None:
@@ -108,6 +123,10 @@ def main() -> None:
     options.write_text("\n".join(lines + [f'preferredGraphicsBackend:"{args.backend}"']) + "\n")
 
     # Vanilla server: offline so the test account can join, flat + small view for speed.
+    with socket.socket() as sock:
+        if sock.connect_ex(("127.0.0.1", PORT)) == 0:
+            sys.exit(f"port {PORT} is already in use; is another server or test still running?")
+
     jar = server_jar(mc, shared / "cache")
     (server_dir / "eula.txt").write_text("eula=true\n")
     (server_dir / "server.properties").write_text(
@@ -120,6 +139,13 @@ def main() -> None:
         ["java", "-Xmx2G", "-jar", jar, "nogui"], cwd=server_dir, stdin=subprocess.PIPE,
         stdout=open(server_log, "w"), stderr=subprocess.STDOUT, start_new_session=True,
     )
+
+    def terminated(signum, _frame):
+        raise Fail(f"test interrupted by signal {signum}")
+
+    # Turn SIGTERM/SIGINT into a failure so the finally block stops server and client.
+    signal.signal(signal.SIGTERM, terminated)
+    signal.signal(signal.SIGINT, terminated)
 
     client = None
     ok, reason, backend = False, "", None
@@ -139,7 +165,8 @@ def main() -> None:
             env={**os.environ, "SDL_VIDEO_FORCE_EGL": "1"},
         )
 
-        if not wait_for(server_log, rf"\b{PLAYER} joined the game", client, args.timeout, [server]):
+        if not wait_for(server_log, rf"\b{PLAYER} joined the game", client, args.timeout, [server],
+                        game_log=instance / "logs/latest.log"):
             raise Fail("client exited before joining" if client.poll() is not None else "timed out waiting for the client to join")
         joined = time.monotonic() - started
         game_log = (instance / "logs/latest.log").read_text(errors="replace")
@@ -149,13 +176,34 @@ def main() -> None:
         if args.backend != "default" and (backend or "").lower() != args.backend:
             raise Fail(f"asked for {args.backend} but the game used {backend or 'an unknown backend'}")
 
-        time.sleep(args.soak)
+        # Stay in-game, failing as soon as the player drops or a process dies.
+        joined_at = server_log.stat().st_size
+        left = re.compile(rf"\b{PLAYER} (lost connection: .*|left the game)")
+        deadline = time.monotonic() + args.soak
+        while time.monotonic() < deadline:
+            if m := left.search(read_from(server_log, joined_at)):
+                raise Fail(f"player disconnected while in-game ({m.group(1)})")
+            if client.poll() is not None:
+                raise Fail(f"client exited {client.returncode} while in-game")
+            if server.poll() is not None:
+                raise Fail("server exited while client was in-game")
+            time.sleep(1)
         if shutil.which("import"):
             subprocess.run(["import", "-window", "root", results / "screenshot.png"], check=False)
-        if client.poll() is not None:
-            raise Fail(f"client exited {client.returncode} while in-game")
-        if server.poll() is not None:
-            raise Fail("server exited while client was in-game")
+
+        # Confirm with the server that the player is still connected.
+        before_list = server_log.stat().st_size
+        server.stdin.write(b"list\n")
+        server.stdin.flush()
+        listing = re.compile(r"players online:(.*)")
+        for _ in range(15):
+            time.sleep(1)
+            if m := listing.search(read_from(server_log, before_list)):
+                break
+        else:
+            raise Fail("server did not answer `list`")
+        if PLAYER not in re.split(r"[,\s]+", m.group(1)):
+            raise Fail(f"player no longer connected at the end (server list:{m.group(1) or ' empty'})")
         ok = True
     except Fail as e:
         reason = str(e)

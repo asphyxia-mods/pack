@@ -71,7 +71,8 @@ Adding a new fork: add a `[[fork]]` entry to `forks.toml` (with
 - **Verify** (push / PR): index is up to date, every file has an owner, pack
   exports, validation passes, and the client launches on both graphics
   backends.
-- **Nightly** (03:23 UTC): updates everything on a scratch checkout, exports a
+- **Nightly** (03:23 UTC): updates the Fabric loader (to Fabric's recommended
+  version), mods and fork builds on a scratch checkout, exports a
   candidate, validates and launch-tests it, and uploads the `.mrpack`,
   `report.md` and `changes.patch` as an artifact. It never commits. To accept a nightly's
   updates, `git apply changes.patch` from the repo root and commit.

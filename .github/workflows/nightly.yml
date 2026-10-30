@@ -24,6 +24,7 @@ jobs:
         pack: ["26.3"] # one entry per directory under packs/
     defaults:
       run:
+        shell: bash # explicit, so steps run with pipefail and `| tee` can't hide failures
         working-directory: packs/${{ matrix.pack }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for update-forks.py rate limits
@@ -53,6 +54,10 @@ jobs:
         run: |
           mkdir -p "$OUT"
           ~/go/bin/packwiz modrinth export -o "$RUNNER_TEMP/base.mrpack"
+
+      - name: Update Fabric loader
+        # Mod updates may need a newer loader; move to Fabric's recommended (stable) one.
+        run: ~/go/bin/packwiz migrate loader recommended | tee "$OUT/loader-update.log"
 
       - name: Update Modrinth / CurseForge mods
         run: ~/go/bin/packwiz update --all -y | tee "$OUT/packwiz-update.log"

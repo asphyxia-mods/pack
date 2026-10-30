@@ -1,0 +1,194 @@
+name: Release
+
+# Publishes packs/<pack> as a GitHub release tagged v<version>+<pack>, using
+# the version in pack.toml. The .mrpack is self-contained for non-Modrinth
+# files (fork builds are embedded as overrides), validated, launch-tested on
+# both graphics backends, and attested before the release is published. The
+# release is created as a draft with all assets and published in one step,
+# since the repo uses immutable releases.
+
+on:
+  workflow_dispatch:
+    inputs:
+      pack:
+        description: Pack directory under packs/
+        type: choice
+        options: ["26.3"]
+        default: "26.3"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.pack }}
+
+env:
+  PACKWIZ_VERSION: 170b22d78595 # github.com/packwiz/packwiz commit
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      version: ${{ steps.version.outputs.version }}
+      asset: ${{ steps.version.outputs.asset }}
+    defaults:
+      run:
+        working-directory: packs/${{ inputs.pack }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Version and tag
+        id: version
+        run: |
+          version=$(python3 -I -c 'import tomllib; print(tomllib.load(open("pack.toml", "rb"))["version"])')
+          tag="v$version+${{ inputs.pack }}"
+          if gh release view "$tag" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
+             || git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+            echo "::error::$tag already exists; bump version in packs/${{ inputs.pack }}/pack.toml"
+            exit 1
+          fi
+          {
+            echo "version=$version"
+            echo "tag=$tag"
+            echo "asset=asphyxia-mods-${{ inputs.pack }}-$version.mrpack"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+          cache: false
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/bin/packwiz
+            ~/.cache/packwiz
+            ~/.cache/asphyxia-mods
+          key: release-${{ env.PACKWIZ_VERSION }}-${{ hashFiles(format('packs/{0}/index.toml', inputs.pack)) }}
+          restore-keys: release-${{ env.PACKWIZ_VERSION }}-
+
+      - name: Install packwiz
+        run: test -x ~/go/bin/packwiz || go install "github.com/packwiz/packwiz@$PACKWIZ_VERSION"
+
+      - name: Index is up to date
+        run: |
+          ~/go/bin/packwiz refresh
+          git diff --exit-code -- .
+
+      - name: Every file belongs to a mod in the pack
+        run: python3 -I "$GITHUB_WORKSPACE/scripts/check-files.py" .
+
+      - name: Export and embed non-Modrinth files
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/out"
+          ~/go/bin/packwiz modrinth export -o "$RUNNER_TEMP/export.mrpack"
+          python3 -I "$GITHUB_WORKSPACE/scripts/embed-external.py" \
+            "$RUNNER_TEMP/export.mrpack" "$GITHUB_WORKSPACE/out/${{ steps.version.outputs.asset }}"
+
+      - name: Validate
+        run: python3 -I "$GITHUB_WORKSPACE/scripts/validate-pack.py" "$GITHUB_WORKSPACE/out/${{ steps.version.outputs.asset }}" --json "$GITHUB_WORKSPACE/out/validation.json"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ inputs.pack }}
+          path: out/
+          retention-days: 7
+
+  client:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        backend: [opengl, vulkan]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-${{ inputs.pack }}
+          path: out
+
+      - uses: ./.github/actions/client-test
+        with:
+          mrpack: out/${{ needs.build.outputs.asset }}
+          backend: ${{ matrix.backend }}
+          artifact-name: release-client-test-${{ matrix.backend }}
+
+  publish:
+    needs: [build, client]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ needs.build.outputs.tag }}
+      ASSET: ${{ needs.build.outputs.asset }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-${{ inputs.pack }}
+          path: out
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-client-test-opengl
+          path: client-test/opengl/results
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-client-test-vulkan
+          path: client-test/vulkan/results
+
+      - name: Release notes
+        run: |
+          # Compare against the previous release of this pack, if any.
+          prev=$(gh release list -R "$GITHUB_REPOSITORY" --limit 100 --json tagName,isDraft \
+            -q '[.[] | select(.isDraft | not) | .tagName | select(endswith("+${{ inputs.pack }}"))][0] // empty')
+          base="out/$ASSET"
+          if [ -n "$prev" ]; then
+            mkdir -p prev
+            gh release download "$prev" -R "$GITHUB_REPOSITORY" -p '*.mrpack' -D prev
+            base=$(ls prev/*.mrpack | head -1)
+          fi
+          {
+            if [ -n "$prev" ]; then echo "Changes since $prev:"; else echo "First release of this pack."; fi
+            echo
+            python3 -I scripts/report.py "$base" "out/$ASSET" \
+              --validation out/validation.json \
+              --client client-test/opengl/results/result.json \
+              --client client-test/vulkan/results/result.json
+            echo
+            echo "Verify this file's provenance with:"
+            echo
+            echo '```sh'
+            echo "gh attestation verify $ASSET -R $GITHUB_REPOSITORY"
+            echo '```'
+          } > notes.md
+          cat notes.md >> "$GITHUB_STEP_SUMMARY"
+          (cd out && sha256sum "$ASSET" > SHA256SUMS)
+
+      - uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: out/${{ needs.build.outputs.asset }}
+
+      - name: Publish release
+        run: |
+          # Draft first so every asset is attached before the release becomes immutable.
+          gh release create "$TAG" "out/$ASSET" out/SHA256SUMS -R "$GITHUB_REPOSITORY" \
+            --draft --target "$GITHUB_SHA" \
+            --title "asphyxia mods ${{ needs.build.outputs.version }} (${{ inputs.pack }})" \
+            --notes-file notes.md
+          gh release edit "$TAG" -R "$GITHUB_REPOSITORY" --draft=false --latest
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" \
+            -q '"published \(.html_url) immutable=\(.immutable)"'

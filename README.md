@@ -17,6 +17,7 @@ scripts/
   validate-pack.py   hashes, duplicate mod ids, missing deps, breaks/conflicts
   check-files.py     every config belongs to a mod still in the pack
   install-mrpack.py  install a pack's client side into a game directory
+  embed-external.py  move non-Modrinth downloads into a .mrpack as overrides
   client-test.py     boot the real client and join a world
   report.py          markdown diff between two exported packs
 ```
@@ -74,6 +75,29 @@ Adding a new fork: add a `[[fork]]` entry to `forks.toml` (with
   candidate, validates and launch-tests it, and uploads the `.mrpack`,
   `report.md` and `changes.patch` as an artifact. It never commits. To accept a nightly's
   updates, `git apply changes.patch` from the repo root and commit.
+- **Release** (manual): builds `packs/<pack>` as release `v<version>+<pack>`
+  using the version in `pack.toml`, see below.
+
+### Releases
+
+Run the **Release** workflow and pick a pack. It refuses to run if the tag
+already exists, so bump `version` in `pack.toml` first. The workflow:
+
+1. exports the pack and embeds every non-Modrinth file (the fork builds) into
+   the `.mrpack` as overrides, so launchers like Prism don't warn about
+   downloads from outside Modrinth;
+2. validates it and runs the client launch test on both graphics backends
+   against that exact file;
+3. writes release notes comparing it with the previous release of the pack;
+4. attests the `.mrpack`'s build provenance and publishes it with
+   `SHA256SUMS`. The release is created as a draft with all assets, then
+   published, after which it is immutable.
+
+Verify a downloaded pack with:
+
+```sh
+gh attestation verify asphyxia-mods-26.3-<version>.mrpack -R asphyxia-mods/pack
+```
 
 ### Client launch test
 

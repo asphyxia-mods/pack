@@ -5,6 +5,7 @@ usage: report.py BASE.mrpack CANDIDATE.mrpack [--validation RESULT.json] [--clie
 """
 import argparse
 import hashlib
+import io
 import json
 import re
 import zipfile
@@ -21,14 +22,28 @@ def key(entry: dict) -> str:
     return f"path:{entry['path']}"
 
 
+SOURCE = {"mod": "bundled", "path": "other"}
+
+
+def bundled_key(data: bytes, path: str) -> str:
+    """Bundled jars are identified by their Fabric mod id, so version bumps
+    that change the filename still pair up."""
+    try:
+        with zipfile.ZipFile(io.BytesIO(data)) as jar:
+            return "mod:" + json.loads(jar.read("fabric.mod.json").decode("utf-8-sig"), strict=False)["id"]
+    except (KeyError, ValueError, zipfile.BadZipFile):
+        return f"bundled:{path}"
+
+
 def load(mrpack: Path) -> tuple[dict, dict[str, tuple[str, str]]]:
     """index, and identity -> (filename, sha512) for every mod file."""
     with zipfile.ZipFile(mrpack) as z:
         index = json.loads(z.read("modrinth.index.json"))
         files = {key(f): (Path(f["path"]).name, f["hashes"]["sha512"]) for f in index["files"]}
         for n in z.namelist():
-            if re.match(r"(client-)?overrides/mods/.+\.jar$", n):
-                files[f"bundled:{n.split('/', 1)[1]}"] = (Path(n).name, hashlib.sha512(z.read(n)).hexdigest())
+            if re.match(r"(client-|server-)?overrides/mods/.+\.jar$", n):
+                data = z.read(n)
+                files[bundled_key(data, n.split("/", 1)[1])] = (Path(n).name, hashlib.sha512(data).hexdigest())
     return index, files
 
 
@@ -44,7 +59,7 @@ def main() -> None:
     cand_index, cand = load(args.candidate)
     # Changed contents count as an update even when the filename stays the same.
     updated = sorted(
-        (base[k][0], cand[k][0] if cand[k][0] != base[k][0] else f"{cand[k][0]} (new contents)", k.split(":")[0])
+        (base[k][0], cand[k][0] if cand[k][0] != base[k][0] else f"{cand[k][0]} (new contents)", SOURCE.get(k.split(":")[0], k.split(":")[0]))
         for k in base.keys() & cand.keys() if base[k][1] != cand[k][1]
     )
     added = sorted(cand[k][0] for k in cand.keys() - base.keys())
@@ -58,7 +73,7 @@ def main() -> None:
         f"Minecraft {deps.get('minecraft')} · Fabric {deps.get('fabric-loader')}",
         "",
         f"**{len(cand)} files**: {len(updated)} updated "
-        f"({sum(1 for u in updated if u[2] == 'github')} custom builds), "
+        f"({sum(1 for u in updated if u[2] in ('github', 'bundled'))} custom builds), "
         f"{len(added)} added, {len(removed)} removed, {unchanged} unchanged",
     ]
     if base_index["dependencies"] != deps:

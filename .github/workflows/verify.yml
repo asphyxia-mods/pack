@@ -55,7 +55,9 @@ jobs:
         run: python3 -I "$GITHUB_WORKSPACE/scripts/check-files.py" .
 
       - name: Export
-        run: ~/go/bin/packwiz modrinth export -o "$GITHUB_WORKSPACE/out/pack.mrpack"
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/out"
+          ~/go/bin/packwiz modrinth export -o "$GITHUB_WORKSPACE/out/pack.mrpack"
 
       - name: Validate
         run: python3 -I "$GITHUB_WORKSPACE/scripts/validate-pack.py" "$GITHUB_WORKSPACE/out/pack.mrpack"

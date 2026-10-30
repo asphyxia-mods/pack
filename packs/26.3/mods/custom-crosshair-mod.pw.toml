@@ -1,0 +1,13 @@
+name = "Custom Crosshair Mod"
+filename = "custom-crosshair-mod-v1.6.9-fabric-mc26.3.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/o1tyE5vJ/versions/ISX5VYSn/custom-crosshair-mod-v1.6.9-fabric-mc26.3.jar"
+hash-format = "sha512"
+hash = "bddd9f8e691f0e5f9d964d785247139fcb03a6fdd9a744f8e70dbcd647fa428f14da9b33d4d85c67a45f2519cb7e979cab5083c8fa565d25d0b00bafa6bf8d03"
+
+[update]
+[update.modrinth]
+mod-id = "o1tyE5vJ"
+version = "ISX5VYSn"

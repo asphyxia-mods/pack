@@ -1,0 +1,13 @@
+name = "SeedMapper"
+filename = "seedmapper-2.35.0.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/C4GbEnuY/versions/kqOgQoPp/seedmapper-2.35.0.jar"
+hash-format = "sha512"
+hash = "d4be368d04691655c1812ac487e5dcc8ad40a300bd8919e2f521dc29b571dec1e3afe4e827adf241bf5fc656bef4ce678afac7b533403a65046a6e3b5802b03c"
+
+[update]
+[update.modrinth]
+mod-id = "C4GbEnuY"
+version = "kqOgQoPp"

@@ -1,0 +1,8 @@
+name = "asphyxia-core"
+filename = "asphyxia-core-1.0.0.jar"
+side = "client"
+
+[download]
+url = "https://github.com/asphyxiamywife/asphyxia-core/releases/download/v1/asphyxia-core-1.0.0.jar"
+hash-format = "sha256"
+hash = "8f474d00e27d765ea54bf49869349e9ba3119dfe2ad83e1a9ebef4476a921562"

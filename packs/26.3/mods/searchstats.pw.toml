@@ -1,0 +1,13 @@
+name = "Search Stats"
+filename = "searchstats-fabric-1.103.0+26.2.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/ExI7GmJi/versions/m7F3XPvR/searchstats-fabric-1.103.0%2B26.2.jar"
+hash-format = "sha512"
+hash = "77fc26114c917fd679689c37bd51e34248503ef56f6dc083630942bdbbaa533171a51b428bcbaad83f02aae5910c8a60009da0b532e14b53e204b38c55022676"
+
+[update]
+[update.modrinth]
+mod-id = "ExI7GmJi"
+version = "m7F3XPvR"

@@ -1,0 +1,8 @@
+name = "TransformHandlers (asphyxia port)"
+filename = "transformhandlers-2.0.0-alpha.5+26.3-s8.jar"
+side = "both"
+
+[download]
+url = "https://github.com/asphyxiamywife/TransformHandlers/releases/download/v2.0.0-alpha.4%2B26.3/transformhandlers-2.0.0-alpha.5%2B26.3-s8.jar"
+hash-format = "sha256"
+hash = "8fae48f68f3321a46e40b3fad970d5b35368a8caf3fac277455cdffa1699be58"

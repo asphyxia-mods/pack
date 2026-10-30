@@ -1,0 +1,13 @@
+name = "Give Me Back MC-80476"
+filename = "give_me_back_mc_80476-1.0.1+26.3-snapshot-4.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/7Q8JaVjV/versions/dsTgepCq/give_me_back_mc_80476-1.0.1%2B26.3-snapshot-4.jar"
+hash-format = "sha512"
+hash = "aebc1a579969f74e292905d797f04cf7c3f77098cc0d9e73b763a340005418c6afe8cec50784b35a7b04b2b9a48775f07c81c5e055eae60e91989587b7889eb3"
+
+[update]
+[update.modrinth]
+mod-id = "7Q8JaVjV"
+version = "dsTgepCq"

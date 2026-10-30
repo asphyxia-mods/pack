@@ -1,0 +1,33 @@
+# Mods built from GitHub Releases rather than Modrinth/CurseForge.
+# scripts/update-forks.py turns each entry into mods/<name>.pw.toml, pinned
+# by URL + sha256. `asset` is a regex matched against release asset names;
+# the newest release with a matching asset wins. GitHub prereleases are
+# skipped unless the entry sets `prerelease = true`.
+
+[[fork]]
+name = "custom-hud"
+title = "CustomHUD (asphyxia fork)"
+repo = "asphyxiamywife/CustomHUD"
+asset = '^custom_hud-[\d.]+\+26\.3\.jar$'
+side = "client"
+
+[[fork]]
+name = "inventory-tabs"
+title = "Inventory Tabs (asphyxia port)"
+repo = "asphyxiamywife/inventory-tabs"
+asset = '^inventory-tabs-.+\+26\.3\.jar$'
+side = "client"
+
+[[fork]]
+name = "transformhandlers"
+title = "TransformHandlers (asphyxia port)"
+repo = "asphyxiamywife/TransformHandlers"
+asset = '^transformhandlers-.+\+26\.3(-s\d+)?\.jar$'
+side = "both"
+
+[[fork]]
+name = "asphyxia-core"
+title = "asphyxia-core"
+repo = "asphyxiamywife/asphyxia-core"
+asset = '^asphyxia-core-[\d.]+\.jar$'
+side = "client"

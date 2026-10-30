@@ -1,0 +1,13 @@
+name = "Move Subtitles"
+filename = "movesubtitles-1.3+26.1-fabric.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/xoAMN4kp/versions/1dcKoH8n/movesubtitles-1.3%2B26.1-fabric.jar"
+hash-format = "sha512"
+hash = "dd153d642115ea3a30e7c9bd1da9303517cdd8d2c5d8ab67abcddd3832d5c5764894bafacd66dcb283f85389581b3ec5d3c158c1b8df7c751cdae7d17fcfc181"
+
+[update]
+[update.modrinth]
+mod-id = "xoAMN4kp"
+version = "1dcKoH8n"

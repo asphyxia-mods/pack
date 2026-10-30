@@ -1,0 +1,13 @@
+name = "Item Editor - Component & NBT"
+filename = "Item Editor-26.3-b25.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/FFDotM4D/versions/FHgiADB7/Item%20Editor-26.3-b25.jar"
+hash-format = "sha512"
+hash = "e0a743db9560ee2cec576ca4d22639e257f9a714926bac5e68bca1e3e44f770e7aecec7185b19b6188ea2a0f02662aeaf774ce363cf483d1f684c378e12e6077"
+
+[update]
+[update.modrinth]
+mod-id = "FFDotM4D"
+version = "FHgiADB7"

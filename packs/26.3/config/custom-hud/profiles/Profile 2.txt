@@ -1,0 +1,31 @@
+==BackgroundColor:#77000000==
+==Section:BottomRight, 0, -150==
+&{ff8e44ad}Biome: &{ffC39BD3}{biome} &7&o({dimension}){{slime_chunk,"&bSlime"}}
+&{ff8e44ad}Facing: &{ffC39BD3}{facing} &7&o({facing_towards_pn_sign}{facing_towards_xz})
+
+&{ff8e44ad}Time: &{ffC39BD3}{hour24}:{minute}&{ff8e44ad}, Day: &{ffC39BD3}{day}
+&{ff8e44ad}D: &{ffC39BD3}{local_difficulty} &{ff8e44ad}// &{ffC39BD3}{clamped_local_difficulty}
+&{ff8e44ad}E: &{ffC39BD3}{entities_rendered} &{ff8e44ad}P: &{ffC39BD3}{particles}
+&{ff8e44ad}Light: &{ffC39BD3}{light_block}
+
+==Section:BottomRight, -2, 5 ==
+=if: gliding=
+&{ffc7c1ff}Pull up: &{ffb57edc}{eph_pull_up_seconds}s
+&{ffc7c1ff}Pull down: &{ffb57edc}{eph_release_down_seconds}s
+=endif=
+{bx}, {by}, {bz} 
+==Section:BottomLeft, 0, -30==
+=if: gliding=
+&{ffc7c1ff}y gain: &{ffb57edc}{eph_cycle_dy}b
+=endif=
+{bx}, {by}, {bz} 
+&{ffC39BD3}{version} &{ff8e44ad}{modded_name} with &{ffC39BD3}{mods} &{ff8e44ad}mods powered by java &{ffC39BD3}{java_version}
+&{ff8e44ad}on &{ffC39BD3}{server_brand} &{ff8e44ad}server
+==Section:BottomLeft, 270, -20, true==
+&7{fps} fps
+cpu: &7{cpu}%
+gpu: &7{gpu}%
+==Section:BottomRight, -328, -35 ==
+&{ff8e44ad}Saturation: &{ffC39BD3}{saturation_per}%
+==Section:BottomRight, -415, -225 ==
+{tbd}

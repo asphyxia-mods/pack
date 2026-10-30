@@ -1,0 +1,13 @@
+name = "Network Proxy"
+filename = "networkproxy-1.2.0-26.x.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/7gjhwrus/versions/2bmO0b1Q/networkproxy-1.2.0-26.x.jar"
+hash-format = "sha512"
+hash = "ae37c07b1daa83b3721e8cc79dc5710596fdb914d4777222669f6730a31521d64968a4ea5e64bbe947d096e6ab39f05e6474305960c8502c940c82d4945ee599"
+
+[update]
+[update.modrinth]
+mod-id = "7gjhwrus"
+version = "2bmO0b1Q"

@@ -1,0 +1,14 @@
+{
+  "enableMod": true,
+  "timeInSeconds": false,
+  "showDurability": true,
+  "showFoodValues": true,
+  "showCompostable": true,
+  "showBurnTime": true,
+  "showUseCooldown": true,
+  "showEnchantability": true,
+  "showRepairCost": true,
+  "showStrength": true,
+  "showEnchantmentPower": true,
+  "showModName": true
+}

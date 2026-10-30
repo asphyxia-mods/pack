@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "profiles": [
+    {
+      "fileName": "default.json",
+      "basedOn": "Bundled default",
+      "createdAtMillis": 1787179791110,
+      "lastModifiedAtMillis": 1789593403311,
+      "loadedFileModifiedAtMillis": 1789593403312,
+      "loadedFileFingerprint": "7642d1f7ac4586d6976ba5f5c5b91344eb4d888e9158d9c548561a369c56083a"
+    }
+  ]
+}

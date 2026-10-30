@@ -1,0 +1,13 @@
+name = "No darkness effect"
+filename = "removewardeneffect-0.0.2-26.2FB.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/TsB0rgEK/versions/qdFCgz4V/removewardeneffect-0.0.2-26.2FB.jar"
+hash-format = "sha512"
+hash = "ed38d902dc56f46069540e5d160eb0701e7c32327f0d8a924810e7885b8a8caaf981450c8ff95a2caf97f85a196309ed5d848965115afdd24526cebed55fac77"
+
+[update]
+[update.modrinth]
+mod-id = "TsB0rgEK"
+version = "qdFCgz4V"

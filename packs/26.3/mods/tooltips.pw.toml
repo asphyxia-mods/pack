@@ -1,0 +1,13 @@
+name = "Lumen Tooltips"
+filename = "lumen-tooltips-fabric-26.3-b8.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/ay9TFvI5/versions/ZHE9x35D/lumen-tooltips-fabric-26.3-b8.jar"
+hash-format = "sha512"
+hash = "c064968a409373a4203c432eb459c003eca60f6e82f189058b7f31c0d4ad0fc2dd234ea06cecc1858dbf4e7bf6947ffd20649c4e3436c4a1a220758efdabbcbe"
+
+[update]
+[update.modrinth]
+mod-id = "ay9TFvI5"
+version = "ZHE9x35D"

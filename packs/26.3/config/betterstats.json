@@ -1,0 +1,7 @@
+{
+	"common-registerCommands": true,
+	"common-apiEndpoint": "",
+	"common-experimentalFeatures": false,
+	"client-allowChatPsaMessages": true,
+	"client-guiMobsFollowCursor": true
+}

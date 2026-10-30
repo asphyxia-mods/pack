@@ -1,0 +1,24 @@
+{
+  "allowMovement": {
+    "journeymap.client.ui.fullscreen.Fullscreen": true,
+    "freelook.freelook.FreelookScreen": true,
+    "net.minecraft.class_433": true,
+    "com.minenash.customhud.gui.NewConfigScreen": true,
+    "com.wildfire.gui.screen.WildfireFirstTimeSetupScreen": true,
+    "net.minecraft.class_429": true,
+    "net.minecraft.class_458": true,
+    "net.minecraft.class_6599": true,
+    "fi.dy.masa.tweakeroo.gui.GuiConfigs": true,
+    "journeymap.client.ui.fullscreen.menu.FullScreenPopupMenu": true,
+    "journeymap.client.ui.option.ClientOptionsManager": true,
+    "journeymap.client.ui.waypointmanager.WaypointManager": true,
+    "meteordevelopment.meteorclient.gui.screens.ModulesScreen": true,
+    "fi.dy.masa.minihud.gui.GuiConfigs": true,
+    "me.flashyreese.mods.reeses_sodium_options.client.gui.SodiumVideoOptionsScreen": true,
+    "dev.isxander.yacl3.gui.YACLScreen": true,
+    "dev.isxander.yacl3.gui.controllers.PopupControllerScreen": true,
+    "journeymap.client.ui.dialog.AboutDialog": true,
+    "journeymap.client.ui.component.screens.ScrollPaneScreen": true
+  },
+  "hideBackground": {}
+}

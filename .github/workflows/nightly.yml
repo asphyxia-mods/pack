@@ -1,0 +1,129 @@
+name: Nightly
+
+# Builds an updated candidate of each pack. Never pushes to main: the result
+# is an artifact containing the .mrpack, a change report and the updated pack
+# directory. To accept the updates: `git apply changes.patch` from the repo root.
+
+on:
+  schedule:
+    - cron: "23 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PACKWIZ_VERSION: 170b22d78595 # github.com/packwiz/packwiz commit
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        pack: ["26.3"] # one entry per directory under packs/
+    defaults:
+      run:
+        working-directory: packs/${{ matrix.pack }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for update-forks.py rate limits
+      OUT: ${{ github.workspace }}/out
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+          cache: false
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/bin/packwiz
+            ~/.cache/packwiz
+            ~/.cache/asphyxia-mods
+          key: nightly-${{ env.PACKWIZ_VERSION }}-${{ github.run_id }}
+          restore-keys: nightly-${{ env.PACKWIZ_VERSION }}-
+
+      - name: Install packwiz
+        run: test -x ~/go/bin/packwiz || go install "github.com/packwiz/packwiz@$PACKWIZ_VERSION"
+
+      - name: Export baseline
+        run: |
+          mkdir -p "$OUT"
+          ~/go/bin/packwiz modrinth export -o "$RUNNER_TEMP/base.mrpack"
+
+      - name: Update Modrinth / CurseForge mods
+        run: ~/go/bin/packwiz update --all -y | tee "$OUT/packwiz-update.log"
+
+      - name: Update fork builds
+        run: python3 -I "$GITHUB_WORKSPACE/scripts/update-forks.py" . | tee "$OUT/forks-update.log"
+
+      - name: Save changes
+        run: |
+          ~/go/bin/packwiz refresh
+          # Intent-to-add so new files (e.g. a new dependency's .pw.toml) are in the patch.
+          git add --intent-to-add -- .
+          git diff --binary HEAD -- . > "$OUT/changes.patch"
+          git diff --stat HEAD -- . > "$OUT/changes.stat"
+
+      - name: Export candidate
+        run: |
+          stamp="nightly.$(date -u +%Y%m%d)"
+          sed -i -E "s/^version = \"([^\"]*)\"/version = \"\1-$stamp\"/" pack.toml
+          ~/go/bin/packwiz refresh
+          ~/go/bin/packwiz modrinth export -o "$OUT/asphyxia-mods-${{ matrix.pack }}-$stamp.mrpack"
+
+      - name: Validate
+        id: validate
+        continue-on-error: true
+        run: python3 -I "$GITHUB_WORKSPACE/scripts/validate-pack.py" "$OUT"/*.mrpack --json "$OUT/validation.json"
+
+      - name: Locate candidate
+        id: candidate
+        run: echo "mrpack=$(cd "$GITHUB_WORKSPACE" && ls out/*.mrpack)" >> "$GITHUB_OUTPUT"
+
+      - name: Client launch test (OpenGL)
+        id: client-opengl
+        if: steps.validate.outcome == 'success'
+        continue-on-error: true
+        uses: ./.github/actions/client-test
+        with:
+          mrpack: ${{ steps.candidate.outputs.mrpack }}
+          backend: opengl
+          artifact-name: asphyxia-mods-${{ matrix.pack }}-nightly-client-opengl
+
+      - name: Client launch test (Vulkan)
+        id: client-vulkan
+        if: steps.validate.outcome == 'success'
+        continue-on-error: true
+        uses: ./.github/actions/client-test
+        with:
+          mrpack: ${{ steps.candidate.outputs.mrpack }}
+          backend: vulkan
+          artifact-name: asphyxia-mods-${{ matrix.pack }}-nightly-client-vulkan
+
+      - name: Report
+        if: always()
+        run: |
+          python3 -I "$GITHUB_WORKSPACE/scripts/report.py" "$RUNNER_TEMP/base.mrpack" "$OUT"/*.mrpack \
+            --validation "$OUT/validation.json" \
+            --client "$GITHUB_WORKSPACE/client-test/opengl/results/result.json" \
+            --client "$GITHUB_WORKSPACE/client-test/vulkan/results/result.json" | tee "$OUT/report.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: asphyxia-mods-${{ matrix.pack }}-nightly
+          path: |
+            out/
+            packs/${{ matrix.pack }}/
+          retention-days: 14
+
+      - name: Fail if validation or client test failed
+        if: >-
+          steps.validate.outcome != 'success' ||
+          steps.client-opengl.outcome != 'success' ||
+          steps.client-vulkan.outcome != 'success'
+        run: exit 1

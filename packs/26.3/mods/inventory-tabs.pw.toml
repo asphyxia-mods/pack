@@ -1,0 +1,8 @@
+name = "Inventory Tabs (asphyxia port)"
+filename = "inventory-tabs-1.4.3-a48b2+26.3.jar"
+side = "client"
+
+[download]
+url = "https://github.com/asphyxiamywife/inventory-tabs/releases/download/v1.4.3-a48b2-26.3-snapshot.4/inventory-tabs-1.4.3-a48b2%2B26.3.jar"
+hash-format = "sha256"
+hash = "f16de26af60a574ac5202b947b981172ed9ea6516ab0402266fb272bf262c93f"

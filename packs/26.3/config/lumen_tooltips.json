@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "controls": {
+    "detailsMode": "ALWAYS",
+    "detailsKey": "key.keyboard.left.shift",
+    "itemEditorKey": "key.keyboard.left.control+key.keyboard.space"
+  },
+  "modules": {
+    "durability": {
+      "showPercent": false,
+      "useColors": false,
+      "palette": "DEFAULT",
+      "warningPercent": 50,
+      "dangerPercent": 25
+    },
+    "food": {
+      "enabled": true,
+      "showHunger": true,
+      "showSaturation": true,
+      "showEffects": true
+    },
+    "enchantments": {
+      "enabled": false,
+      "decimalLevels": false
+    },
+    "comparison": {
+      "enabled": false
+    },
+    "navigation": {
+      "enabled": false,
+      "maps": false,
+      "compasses": true
+    },
+    "extraStatistics": {
+      "enabled": true,
+      "activation": "ALWAYS",
+      "key": "key.keyboard.left.shift",
+      "useSeconds": true,
+      "fuelTime": true,
+      "compostChance": true,
+      "useCooldown": true,
+      "enchantability": true,
+      "repairCost": true,
+      "blockHardness": true,
+      "blastResistance": true,
+      "enchantmentPower": true,
+      "miningLevel": true,
+      "miningSpeed": true,
+      "modName": true
+    },
+    "itemEditor": {
+      "saveKey": "key.keyboard.left.control+key.keyboard.s",
+      "target": "FIRST_AVAILABLE",
+      "pageNumber": 1,
+      "pageName": "Lumen Tooltips",
+      "createPage": true,
+      "showFeedback": true
+    },
+    "safety": {
+      "translationCrashFix": true,
+      "globalComponentVisitGuard": true,
+      "textLengthLimit": true,
+      "maxCharacters": 65536,
+      "maxLiteralCharacters": 524288,
+      "obfuscatedCharacterWeight": 50,
+      "maxTranslationDepth": 64,
+      "maxTranslationVisits": 2048
+    },
+    "particleSafety": {
+      "enabled": true,
+      "limitPerPacket": true,
+      "limitRate": true,
+      "dropOversized": false,
+      "showWarnings": true,
+      "limitElderGuardians": true,
+      "maxElderGuardians": 1,
+      "limitExplosionEmitters": true,
+      "maxExplosionEmitters": 8,
+      "limitGustEmitters": true,
+      "maxGustEmitters": 16,
+      "maxPerPacket": 4096,
+      "maxPerWindow": 32768,
+      "windowMillis": 1000,
+      "warningCooldownSeconds": 10
+    },
+    "tooltip": {
+      "edgeFix": true,
+      "scrollLongTooltips": true,
+      "showControlHints": true,
+      "showPreviewHint": true,
+      "showOpenContainerHint": true,
+      "showOpenBookHint": true,
+      "showEditItemHint": true,
+      "showSaveItemHint": true,
+      "ignoreHideTooltip": false,
+      "ignoredHiddenComponents": [],
+      "maxWidth": 0,
+      "scrollStep": 18
+    },
+    "preview": {
+      "enabled": true,
+      "density": "COMPACT",
+      "accents": true,
+      "reducedMotion": true,
+      "activation": "ALWAYS",
+      "key": "key.keyboard.left.shift",
+      "openContainers": true,
+      "openBooks": true,
+      "openKey": "key.keyboard.left.alt",
+      "shulkers": true,
+      "containers": true,
+      "containerMode": "COMPACT",
+      "mergeContainerStacks": "OFF",
+      "containerAlignment": "LEFT",
+      "showContainerTitle": false,
+      "showContainerCounts": true,
+      "containerTintPercent": 55,
+      "bundles": true,
+      "maps": true,
+      "banners": true,
+      "decoratedPots": true,
+      "potions": true,
+      "enderChest": true,
+      "paintings": true,
+      "playerHeads": true,
+      "signs": true,
+      "nestedNavigation": true,
+      "itemDetails": true,
+      "books": true,
+      "fireworks": true,
+      "entities": true,
+      "areaEffectClouds": true,
+      "displayEntities": true,
+      "itemFrames": true,
+      "displayYaw": 30,
+      "displayPitch": -15,
+      "spawnEggs": false,
+      "mobBuckets": false,
+      "spawners": true
+    },
+    "statistics": {
+      "enabled": false
+    }
+  }
+}

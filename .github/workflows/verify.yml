@@ -1,0 +1,90 @@
+name: Verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PACKWIZ_VERSION: 170b22d78595 # github.com/packwiz/packwiz commit
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        pack: ["26.3"] # one entry per directory under packs/
+    defaults:
+      run:
+        working-directory: packs/${{ matrix.pack }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+          cache: false
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/bin/packwiz
+            ~/.cache/packwiz
+            ~/.cache/asphyxia-mods
+          key: pack-${{ env.PACKWIZ_VERSION }}-${{ hashFiles(format('packs/{0}/index.toml', matrix.pack)) }}
+          restore-keys: pack-${{ env.PACKWIZ_VERSION }}-
+
+      - name: Install packwiz
+        run: test -x ~/go/bin/packwiz || go install "github.com/packwiz/packwiz@$PACKWIZ_VERSION"
+
+      - name: Index is up to date
+        run: |
+          ~/go/bin/packwiz refresh
+          git diff --exit-code -- . || {
+            echo "::error::index.toml is stale; run 'packwiz refresh' in packs/${{ matrix.pack }} and commit"
+            exit 1
+          }
+
+      - name: Every file belongs to a mod in the pack
+        run: python3 -I "$GITHUB_WORKSPACE/scripts/check-files.py" .
+
+      - name: Export
+        run: ~/go/bin/packwiz modrinth export -o "$GITHUB_WORKSPACE/out/pack.mrpack"
+
+      - name: Validate
+        run: python3 -I "$GITHUB_WORKSPACE/scripts/validate-pack.py" "$GITHUB_WORKSPACE/out/pack.mrpack"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pack-${{ matrix.pack }}
+          path: out/pack.mrpack
+          retention-days: 7
+
+  client:
+    needs: verify
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        pack: ["26.3"]
+        backend: [opengl, vulkan]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: pack-${{ matrix.pack }}
+          path: out
+
+      - uses: ./.github/actions/client-test
+        with:
+          mrpack: out/pack.mrpack
+          backend: ${{ matrix.backend }}
+          artifact-name: client-test-${{ matrix.pack }}-${{ matrix.backend }}

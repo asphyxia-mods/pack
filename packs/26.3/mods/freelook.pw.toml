@@ -1,0 +1,13 @@
+name = "Freelook"
+filename = "freelook-1.4.4.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/g4pR0Fmy/versions/YT42PXTm/freelook-1.4.4.jar"
+hash-format = "sha512"
+hash = "686c982072441f15f1bf2a0d2029901f140c8f1cfd28e22d21f44e471243314addc5d526738255a0db3521c0c7d3c7d78f67334f8d193005ce51b8864b907f8c"
+
+[update]
+[update.modrinth]
+mod-id = "g4pR0Fmy"
+version = "YT42PXTm"

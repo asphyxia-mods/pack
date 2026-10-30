@@ -1,0 +1,56 @@
+name: Client launch test
+description: Boot the real client with a .mrpack under Xvfb and join a vanilla server.
+
+inputs:
+  mrpack:
+    description: Path to the exported .mrpack, relative to the workspace
+    required: true
+  backend:
+    description: Graphics backend to force (opengl or vulkan)
+    required: true
+  artifact-name:
+    description: Name of the uploaded logs artifact
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@v5
+      with:
+        distribution: temurin
+        java-version: "25"
+
+    - name: Install Xvfb, Mesa and portablemc
+      shell: bash
+      run: |
+        if ! command -v portablemc >/dev/null; then
+          sudo apt-get update -q
+          sudo apt-get install -yq --no-install-recommends \
+            xvfb libgl1-mesa-dri libegl1 libegl-mesa0 mesa-vulkan-drivers imagemagick
+          pipx install portablemc==5.0.6
+        fi
+
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/asphyxia-mods
+          client-test/mc
+          client-test/cache
+        key: client-test-${{ inputs.backend }}-${{ hashFiles(inputs.mrpack) }}
+        restore-keys: client-test-
+
+    - name: Launch client (${{ inputs.backend }}) and join a world
+      shell: bash
+      env:
+        LIBGL_ALWAYS_SOFTWARE: "1"
+      run: |
+        xvfb-run -a -s "-screen 0 1280x720x24" \
+          python3 -I "$GITHUB_ACTION_PATH/../../../scripts/client-test.py" "${{ inputs.mrpack }}" \
+          --backend "${{ inputs.backend }}" --work "client-test/${{ inputs.backend }}" --shared client-test
+
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: client-test/${{ inputs.backend }}/results/
+        retention-days: 14

@@ -1,0 +1,13 @@
+name = "elytra pitch helper"
+filename = "elytrapitchhelper-fabric-3.0.1+26.3.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/CkpPw9cW/versions/ZXmVHPBC/elytrapitchhelper-fabric-3.0.1%2B26.3.jar"
+hash-format = "sha512"
+hash = "64d934b872c203fd088913389b3267bebed6710e23dd6b799db437b3db54390ea32d3a37e086aabb836c1f40e60fa416a1abe9f115d94e1919835a9bce273077"
+
+[update]
+[update.modrinth]
+mod-id = "CkpPw9cW"
+version = "ZXmVHPBC"

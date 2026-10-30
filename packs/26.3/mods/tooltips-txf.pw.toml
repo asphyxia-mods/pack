@@ -1,0 +1,13 @@
+name = "Tooltips TXF"
+filename = "tooltipstxf-26.3-1.0.8-fabric.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/RJXFHzQ1/versions/kaF6Sdn3/tooltipstxf-26.3-1.0.8-fabric.jar"
+hash-format = "sha512"
+hash = "b7dab27d3e6a6f5069d60d1910ebf86e2f1cfe7e6a3b091534dc195d74c48eb9095d5e6fc321f26746e691072e44744fca4fa72bb6984fdf094a2a5d1eb40475"
+
+[update]
+[update.modrinth]
+mod-id = "RJXFHzQ1"
+version = "kaF6Sdn3"

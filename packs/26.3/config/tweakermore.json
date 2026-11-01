@@ -641,7 +641,7 @@
       }
     },
     "disableDarknessEffect": {
-      "enabled": false,
+      "enabled": true,
       "hotkey": {
         "keys": ""
       }

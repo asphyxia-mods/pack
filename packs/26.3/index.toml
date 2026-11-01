@@ -306,7 +306,7 @@ hash = "8938e23efe0144cd064fddea7786e80c5f73130b5b318cd6b15b849aeae2fb7d"
 
 [[files]]
 file = "config/tweakermore.json"
-hash = "191309dd711f0fd2632668e8c1d6cd50dc87ce7ce1639526f906b6082182ed20"
+hash = "9294f8f2fd40a503a242d8c92358cfaed420b05ee2186244a602fb00a15e609b"
 
 [[files]]
 file = "config/tweakeroo.json"
@@ -372,11 +372,6 @@ metafile = true
 [[files]]
 file = "mods/animaticarefabricated.pw.toml"
 hash = "5a14e2da5f1cca725362f8f4d912a94bed22d2c3be2958fde6e91cd1702a99b0"
-metafile = true
-
-[[files]]
-file = "mods/architectury-api.pw.toml"
-hash = "8f4143430d51d6010a5e295d8ab5b407d19f121cfffbf617d1692726ab1e205b"
 metafile = true
 
 [[files]]
@@ -487,11 +482,6 @@ metafile = true
 [[files]]
 file = "mods/controlling.pw.toml"
 hash = "2fa46b8df6c6de59e8d793d1f3fe6de20f590ad8711b826a2a981680bc9aceb3"
-metafile = true
-
-[[files]]
-file = "mods/craterlib.pw.toml"
-hash = "ab42982b2ed1091024ff5ffa24fdb434f272ff069468b7ab8bb6a6b9cbbb838a"
 metafile = true
 
 [[files]]
@@ -710,11 +700,6 @@ hash = "54019b98e621d0ab792d7a2de0f8f2714660e367790b17ffa0ac902344166396"
 metafile = true
 
 [[files]]
-file = "mods/no-darkness-effect.pw.toml"
-hash = "fe8cd462dcb788b73e2f3cde88e5d66ddcf0fed393da5d4d11f280c1e7402b6d"
-metafile = true
-
-[[files]]
 file = "mods/no-telemetry.pw.toml"
 hash = "c5e7e0a3de03c138f587fc56dca70013978677e0cde2ad19024dc798178a49bd"
 metafile = true
@@ -745,11 +730,6 @@ hash = "fc55a57f2a3e5b3f044baf080829c9f5b26ed5eb98097532e845da6019a2f379"
 metafile = true
 
 [[files]]
-file = "mods/placeholder-api.pw.toml"
-hash = "4d3d2ad41a037af6f78e2a6c2908c4098bb0b5c03ad0d2711a0c0c6df5e7a172"
-metafile = true
-
-[[files]]
 file = "mods/puzzle.pw.toml"
 hash = "54fc7617c58ca024cd8e2a1f1dfcfd682cdc4df59d10ccedce9f21ca0741ed1b"
 metafile = true
@@ -777,11 +757,6 @@ metafile = true
 [[files]]
 file = "mods/searchables.pw.toml"
 hash = "91f6defb56c64900bd1ad69147acf1c151b5b372b3ec405933d92ef9308617ae"
-metafile = true
-
-[[files]]
-file = "mods/searchstats.pw.toml"
-hash = "0887f46c9277107e88ecc8b4f428d419aa91b5140f559d2f40b8bd4314fb9eab"
 metafile = true
 
 [[files]]

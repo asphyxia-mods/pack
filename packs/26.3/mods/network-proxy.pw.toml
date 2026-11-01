@@ -1,13 +1,13 @@
 name = "Network Proxy"
-filename = "networkproxy-1.2.0-26.x.jar"
+filename = "networkproxy-fabric-26.3-1.2.1.jar"
 side = "client"
 
 [download]
-url = "https://cdn.modrinth.com/data/7gjhwrus/versions/2bmO0b1Q/networkproxy-1.2.0-26.x.jar"
+url = "https://cdn.modrinth.com/data/7gjhwrus/versions/cUnqfNWL/networkproxy-fabric-26.3-1.2.1.jar"
 hash-format = "sha512"
-hash = "ae37c07b1daa83b3721e8cc79dc5710596fdb914d4777222669f6730a31521d64968a4ea5e64bbe947d096e6ab39f05e6474305960c8502c940c82d4945ee599"
+hash = "98d77be3bb4c2325257d66283cfb23eb7e5473bb26f8eeab0a02175223f08cd879628480397748bcf307ba8e533ae38cff82378fdb99ccda3e6292e792b38088"
 
 [update]
 [update.modrinth]
 mod-id = "7gjhwrus"
-version = "2bmO0b1Q"
+version = "cUnqfNWL"

@@ -1,8 +1,8 @@
 name = "CustomHUD (asphyxia fork)"
-filename = "custom_hud-4.1.2.2+26.3.jar"
+filename = "custom_hud-4.1.2.5+26.3.jar"
 side = "client"
 
 [download]
-url = "https://github.com/asphyxiamywife/CustomHUD/releases/download/v4.1.2.2%2B26.3/custom_hud-4.1.2.2%2B26.3.jar"
+url = "https://github.com/asphyxiamywife/CustomHUD/releases/download/v4.1.2.5%2B26.3/custom_hud-4.1.2.5%2B26.3.jar"
 hash-format = "sha256"
-hash = "baa30c67d8da296f84a0ef90b0f43ffe3e6cc6571d6d03ad6759b54ec53104df"
+hash = "2807c5f39d2f48e6e3bb37b6fc35b8a2fd825e4e5687cdbb1f28f1a8ac89e23b"

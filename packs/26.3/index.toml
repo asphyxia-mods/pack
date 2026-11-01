@@ -30,7 +30,7 @@ hash = "30916b9bf147f4c70078276a71cb4136b1ec2a913beffb982f44c965102b32c2"
 
 [[files]]
 file = "config/betterclouds-v1.json"
-hash = "b1b534a24d8532229a267e8e0b021188676bee191aaf2ed7f74fa8b854d67f4b"
+hash = "52468c11db66dbab09805af8a8a5282dc633e5cb2d6dbe492b20b205be6a3d3f"
 
 [[files]]
 file = "config/bettergrass.json5"
@@ -102,7 +102,7 @@ hash = "d0fc40ba86b8af64f5c27c8c5b3284a5021cd97131e65ca645d64f2421529656"
 
 [[files]]
 file = "config/entity_texture_features.json"
-hash = "cd77ee790785a0a35892822a71a56b291e051184ddbfa4ad71eb5e1c5d45aaa4"
+hash = "1539971158572f3266575354674f046a4a078df7488e4dd66109d59d0de46393"
 
 [[files]]
 file = "config/entityculling.json"
@@ -230,7 +230,7 @@ hash = "9454b2f4edd3091aad295e02b945b8b13d9467cc96db109e921f5d80a7a58c86"
 
 [[files]]
 file = "config/modernfix-mixins.properties"
-hash = "f64e5823c765016152433a0b5af1a611b5ed4108d054db676d64a37c871c53bb"
+hash = "4e032df0f46012ba4a7f5ee642c2948cb4a845a6d0881c94c1da8035dc86e7c7"
 
 [[files]]
 file = "config/modmenu.json"
@@ -871,4 +871,4 @@ metafile = true
 
 [[files]]
 file = "options.txt"
-hash = "6b60f857a242b758b40a80fbc88d02ddd0117fe190de83fe5ba912882832f7bf"
+hash = "26c5390ad9f2a955537d2a01eb0af4a09b0f94ce8a50b3884ee650d0186b8cef"

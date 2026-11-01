@@ -175,7 +175,7 @@ key_key.debug.lightmapTexture:key.keyboard.4
 key_key.debug.improvedTransparency:key.keyboard.x
 key_key.dynamic_fps.toggle_forced:key.keyboard.unknown
 key_key.dynamic_fps.toggle_disabled:key.keyboard.unknown
-key_keybind.custom_crosshair_mod.open_edit_crosshair_gui:key.keyboard.grave.accent
+key_keybind.custom_crosshair_mod.open_edit_crosshair_gui:key.keyboard.unknown
 key_key.custom_hud.enable:key.keyboard.unknown
 key_key.custom_hud.cycle_profiles:key.keyboard.grave.accent
 key_key.custom_hud.show_errors:key.keyboard.unknown
@@ -215,7 +215,7 @@ key_key.gammautils.increaseNightVision:key.keyboard.right
 key_key.gammautils.decreaseNightVision:key.keyboard.left
 key_key.inventory_tabs.key.next_tab:key.keyboard.tab
 key_key.inventory_tabs.key.toggle_tabs:key.keyboard.left.bracket
-key_key.inventoryhud.toggle:key.keyboard.i
+key_key.inventoryhud.toggle:key.keyboard.unknown
 key_key.inventoryhud.openconfig:key.keyboard.unknown
 key_key.inventoryhud.togglepot:key.keyboard.unknown
 key_key.inventoryhud.togglearm:key.keyboard.unknown
@@ -265,10 +265,10 @@ key_key.ok_zoomer.decrease_zoom:key.keyboard.unknown
 key_key.ok_zoomer.increase_zoom:key.keyboard.unknown
 key_key.ok_zoomer.reset_zoom:key.keyboard.unknown
 key_key.optigui.inspect:key.keyboard.unknown
-key_key.seedMap:key.keyboard.m
+key_key.seedMap:key.keyboard.period
 key_key.minimap:key.keyboard.comma
 key_lambdynlights.key.toggle_fps_dynamic_lighting:key.keyboard.unknown
-soundCategory_master:0.0
+soundCategory_master:1.0
 soundCategory_music:1.0
 soundCategory_record:1.0
 soundCategory_weather:1.0

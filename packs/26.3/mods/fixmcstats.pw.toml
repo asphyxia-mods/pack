@@ -1,13 +1,13 @@
 name = "FixMCStats"
-filename = "fix-mc-stats-fabric-26.3-2.6.0.jar"
+filename = "fix-mc-stats-fabric-26.3-2.6.1.jar"
 side = "both"
 
 [download]
-url = "https://cdn.modrinth.com/data/SQKipbkd/versions/rjmjYDE5/fix-mc-stats-fabric-26.3-2.6.0.jar"
+url = "https://cdn.modrinth.com/data/SQKipbkd/versions/7Vpt0BdS/fix-mc-stats-fabric-26.3-2.6.1.jar"
 hash-format = "sha512"
-hash = "a12f0a4b2eaaa902e1ca251881288cbf62b5edc6864ce4feac59e988405203392293c99455cf82f6c360756cf4e6f5a9d613330ae5731824f0f83e8abcaa5499"
+hash = "2795cc534e16d6f754d72b029368ae18ed1d50f48f806acb39fa9e9ae3b338b878b78506a476c8fefbad28584bd657d760daff5296b38838e29851d98388b762"
 
 [update]
 [update.modrinth]
 mod-id = "SQKipbkd"
-version = "rjmjYDE5"
+version = "7Vpt0BdS"
